@@ -15,6 +15,7 @@ func main() {
 	repo := &repository.StudentRepository{DB: db}
 	controller := &controller.StudentController{Repo: repo}
 	http.HandleFunc("/student", controller.SaveStudent)
+	http.HandleFunc("/students", controller.GetAllStudents)
 	fmt.Println("Server Stared at 8080")
 	http.ListenAndServe(":8080", nil)
 }
