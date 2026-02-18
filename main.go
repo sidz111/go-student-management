@@ -14,6 +14,8 @@ func main() {
 	db := db.ConnectDB()
 	repo := &repository.StudentRepository{DB: db}
 	controller := &controller.StudentController{Repo: repo}
+
+	//Finally Mux is Added Here
 	mux := http.NewServeMux()
 	mux.HandleFunc("/student", controller.SaveStudent)
 	mux.HandleFunc("/students", controller.GetAllStudents)
