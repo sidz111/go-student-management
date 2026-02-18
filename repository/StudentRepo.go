@@ -2,6 +2,7 @@ package repository
 
 import (
 	"database/sql"
+	"strconv"
 
 	"github.com/sidz/student-management-go/model"
 )
@@ -33,4 +34,13 @@ func (r *StudentRepository) GetallStudents() ([]model.Student, error) {
 		students = append(students, s)
 	}
 	return students, nil
+}
+
+func (r *StudentRepository) UpdateStudent(student model.Student) (string, error) {
+	query := "update student set name = ?, address = ? where id = ?"
+	_, err := r.DB.Exec(query, student.Name, student.Address, student.Id)
+	if err != nil {
+		return "Student Not Found with id " + strconv.Itoa(student.Id), err
+	}
+	return "Student Updated Successfull with id " + strconv.Itoa(student.Id), err
 }

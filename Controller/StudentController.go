@@ -52,3 +52,31 @@ func (c *StudentController) GetAllStudents(w http.ResponseWriter, r *http.Reques
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(students)
 }
+
+func (c *StudentController) UpdateStudent(w http.ResponseWriter, r *http.Request) {
+
+	if r.Method != http.MethodPut {
+		http.Error(w, "Invalid Method Type", http.StatusMethodNotAllowed)
+		return
+	}
+
+	defer r.Body.Close()
+
+	var student model.Student
+	err := json.NewDecoder(r.Body).Decode(&student)
+	if err != nil {
+		http.Error(w, "Invalid Student Data", http.StatusBadRequest)
+		return
+	}
+
+	msg, err := c.Repo.UpdateStudent(student)
+	if err != nil {
+		http.Error(w, msg, http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(map[string]string{
+		"message": msg,
+	})
+}
