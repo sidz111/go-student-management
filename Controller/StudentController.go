@@ -99,3 +99,24 @@ func (c *StudentController) DeleteStudentById(w http.ResponseWriter, r *http.Req
 		"message": msg,
 	})
 }
+
+func (c *StudentController) GetStudentByID(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodGet {
+		http.Error(w, "Bad Request", http.StatusBadRequest)
+		return
+	}
+
+	id, err := strconv.Atoi(r.URL.Query().Get("id"))
+	if err != nil {
+		http.Error(w, "Student Not Found", http.StatusInternalServerError)
+		return
+	}
+	student, err := c.Repo.GetStudentByID(id)
+	if err != nil {
+		http.Error(w, "Student Not Found", http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(student)
+}

@@ -2,6 +2,7 @@ package repository
 
 import (
 	"database/sql"
+	"fmt"
 	"strconv"
 
 	"github.com/sidz/student-management-go/model"
@@ -52,4 +53,21 @@ func (r *StudentRepository) DeleteStudentById(id int) (string, error) {
 		return "Student Not Found with Id" + strconv.Itoa(id), err
 	}
 	return "Student Deleted Successfully with Id" + strconv.Itoa(id), err
+}
+
+func (r *StudentRepository) GetStudentByID(id int) (model.Student, error) {
+	query := "Select Id, Name, Address From Student where id = ?"
+
+	row := r.DB.QueryRow(query, id)
+
+	var student model.Student
+
+	err := row.Scan(&student.Id, &student.Name, &student.Address)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return student, fmt.Errorf("Student Not Found")
+		}
+		return student, err
+	}
+	return student, nil
 }
