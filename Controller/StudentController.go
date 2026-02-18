@@ -94,7 +94,7 @@ func (c *StudentController) DeleteStudentById(w http.ResponseWriter, r *http.Req
 	if err != nil {
 		http.Error(w, "Failed to Delete Student", http.StatusInternalServerError)
 	}
-	w.Header().Set("Content-Type", "applicstion/json")
+	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(map[string]string{
 		"message": msg,
 	})
