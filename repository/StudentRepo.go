@@ -44,3 +44,12 @@ func (r *StudentRepository) UpdateStudent(student model.Student) (string, error)
 	}
 	return "Student Updated Successfull with id " + strconv.Itoa(student.Id), err
 }
+
+func (r *StudentRepository) DeleteStudentById(id int) (string, error) {
+	query := "Delete from student where id = ?"
+	_, err := r.DB.Exec(query, id)
+	if err != nil {
+		return "Student Not Found with Id" + strconv.Itoa(id), err
+	}
+	return "Student Deleted Successfully with Id" + strconv.Itoa(id), err
+}

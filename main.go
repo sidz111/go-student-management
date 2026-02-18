@@ -17,6 +17,7 @@ func main() {
 	http.HandleFunc("/student", controller.SaveStudent)
 	http.HandleFunc("/students", controller.GetAllStudents)
 	http.HandleFunc("/student/update", controller.UpdateStudent)
+	http.HandleFunc("/student/delete", controller.DeleteStudentById)
 	fmt.Println("Server Stared at 8080")
 	http.ListenAndServe(":8080", nil)
 }

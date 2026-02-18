@@ -3,6 +3,7 @@ package controller
 import (
 	"encoding/json"
 	"net/http"
+	"strconv"
 
 	"github.com/sidz/student-management-go/model"
 	"github.com/sidz/student-management-go/repository"
@@ -76,6 +77,24 @@ func (c *StudentController) UpdateStudent(w http.ResponseWriter, r *http.Request
 	}
 
 	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(map[string]string{
+		"message": msg,
+	})
+}
+
+func (c *StudentController) DeleteStudentById(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodDelete {
+		http.Error(w, "Invalid Method Request", http.StatusBadRequest)
+		return
+	}
+
+	id, _ := strconv.Atoi(r.URL.Query().Get("id"))
+	msg, err := c.Repo.DeleteStudentById(id)
+
+	if err != nil {
+		http.Error(w, "Failed to Delete Student", http.StatusInternalServerError)
+	}
+	w.Header().Set("Content-Type", "applicstion/json")
 	json.NewEncoder(w).Encode(map[string]string{
 		"message": msg,
 	})
